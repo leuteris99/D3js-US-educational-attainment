@@ -66,6 +66,17 @@
 <script src="assets/scripts/script_1.js"></script>
 <script src="assets/scripts/script_2.js"></script>
 <script src="assets/scripts/script_3.js"></script>
+<script>
+    var doc = document.getElementById("radio1");
+
+    doc.on("mouseover", function(event){
+        responsiveVoice.speak("hello");
+    })
+
+    function mouseover(event){
+        responsiveVoice.speak("hello");
+    }
+</script>
 <!-- <script>
     var text = 
     function speakText(text){
