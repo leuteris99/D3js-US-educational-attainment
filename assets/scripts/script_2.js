@@ -74,6 +74,17 @@ d3.json("assets/data/us.json", function(data) {
 
     display(root);
 
+    // speach playback on hover region of USA
+    $(document).ready(function(){
+        $(".children").mouseenter(function(){
+           responsiveVoice.cancel(); 
+           responsiveVoice.speak($(this).text());
+        });
+        $(".children").mouseleave(function(){
+           responsiveVoice.cancel();
+           });
+        });
+
     function display(d) {
         // write text into grandparent
         // and activate click's handler
@@ -109,6 +120,7 @@ d3.json("assets/data/us.json", function(data) {
             .enter().append("rect")
             .attr("class", "child")
             .call(rect);
+            
         // add title to parents
         g.append("rect")
             .attr("class", "parent")
@@ -202,9 +214,11 @@ d3.json("assets/data/us.json", function(data) {
                 }
 
             })
+
         );
 
         display(root);
+        
         });
 
         return g;
