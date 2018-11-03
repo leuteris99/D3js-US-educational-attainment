@@ -153,11 +153,13 @@ function donutChart() {
                         .style('fill', colour(data.data[category])) // colour based on category mouse is over
                         .style('fill-opacity', 0.35);
 
+                        responsiveVoice.speak(toolTipVoice(data)); // start the voice playback
                 });
 
                 // remove the tooltip when mouse leaves the slice/label
                 selection.on('mouseout', function () {
                     d3.selectAll('.toolCircle').remove();
+                    responsiveVoice.cancel();
                 });
             }
 
@@ -184,6 +186,26 @@ function donutChart() {
             }
             // ===========================================================================================
 
+            // function to create a HTML string to use with responsiveVoice
+            // works similar to toolTipHTML function.
+            function toolTipVoice(data) {
+
+                var tip = '',
+                    i   = 0;
+
+                for (var key in data.data) {
+                    console.log(key, data.data);
+                    // if value is a number, format it as a percentage
+                    var value = key == "Percent" ? percentFormat(data.data[key]) : data.data[key];
+
+                    // add the data to a single string
+                    if (i === 0) tip += key + ': ' + value + '.';
+                    else tip += key + ': ' + value + '.';
+                    i++;
+                }
+
+                return tip;
+            }
         });
     }
 
