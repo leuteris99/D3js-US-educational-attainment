@@ -125,6 +125,17 @@ d3.tsv("assets/data/data.tsv", function(error, data) {
 		.style("text-anchor", "start")
 		.text(function(d) { return d; });
 
+	// speach playback on hover colours
+	$(document).ready(function(){
+		$(".legend").mouseenter(function(){
+		responsiveVoice.cancel(); 
+		responsiveVoice.speak($(this).text());
+		});
+		$(".legend").mouseleave(function(){
+		responsiveVoice.cancel();
+		});
+	});
+
 	// animation
 	d3.selectAll("#stack-form input").on("change", handleFormClick);
 

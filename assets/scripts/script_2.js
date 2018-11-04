@@ -76,11 +76,13 @@ d3.json("assets/data/us.json", function(data) {
 
     // speach playback on hover region of USA
     $(document).ready(function(){
-        $(".children").mouseenter(function(){
+        $(".foreignobj").mouseenter(function(){
            responsiveVoice.cancel(); 
-           responsiveVoice.speak($(this).text());
+           $(this).text()
+           var sp = $(this).text();
+           responsiveVoice.speak(sp);
         });
-        $(".children").mouseleave(function(){
+        $(".foreignobj").mouseleave(function(){
            responsiveVoice.cancel();
            });
         });
