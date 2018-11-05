@@ -115,8 +115,36 @@
 
 <!-- alert message for chrome browser to inform about onHover regulations-->
 <script>
-        alert("Due to a Chrome's regulation you need to click anywhere on the screen" +
-        " before you can hear the click sound when you hover a nav bar element with your cursor.");
+    browser = findBrowser();
+    if(browser == "Chrome"){
+        alert("Due to Chrome's regulations you need to click anywhere on the screen" +
+        " before you can hear the click sound when you hover a nav bar element with your cursor." +
+        "\n(On other browsers the feature works properly)");
+    }
+
+    // This function finds the browser user use.
+    function findBrowser(){
+        //ba stands for browser array - it contains the most popular browser to search them by name
+        var ba = ["Firefox", "Edge", "Chrome", "Safari", "MSIE", "Trident", "Opera"];
+        //b stands for browser - is the browser the user currently use
+        //ua stands for user agent - here we will store some info about the user's browser
+        var b, ua = navigator.userAgent;
+
+        // we search about one of the ba's name on the ua string and if we find any we store it to the b var
+        for(var i=0;  i < ba.length ; i++){
+            if( ua.indexOf(ba[i]) > -1){
+                b = ba[i];
+                break;
+            }
+        }
+        // MSIE = Trident = Internet Explorer
+        if(b == "MSIE" || b == "Trident"){
+            b = "Internet Explorer";
+        }
+
+        return b;
+    }
+    
 </script>
 
 </body>
