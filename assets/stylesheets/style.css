@@ -40,7 +40,7 @@ header h1 {
 .fixed-header {
   position: fixed;
   top:0; left:0;
-  width: 100%; 
+  width: 100%;
 }
 
 nav {
@@ -49,6 +49,7 @@ nav {
   background: #292f36;
   position:fixed;
   z-index:10;
+  display: none;
 }
 
 nav ul { 
@@ -58,6 +59,7 @@ nav ul {
   text-align:right;
   width: 960px; 
   max-width: 100%;
+  display: none;
 }
 
 nav ul li { 
@@ -68,6 +70,7 @@ nav ul li {
 nav ul li a {
   text-decoration: none; 
   color: #a9abae;
+  display: none;
 }
 
 body {
@@ -185,7 +188,7 @@ polyline{
 
 /* In biology we generally italicise species names. */
 .labelName {
-    font-size: 0.9em;
+    font-size: 0.7em;
     font-style: italic;
 }
 
@@ -216,6 +219,8 @@ polyline{
 }
 
 .title {
+    padding: 30px 30px 20px;
+    line-height: 44px;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
@@ -225,6 +230,7 @@ polyline{
 .subtitle{
     text-align: center;
     font-family: 'Montserrat', sans-serif;
+    font-size: 30px;
     font-weight: 500;
     margin: 50px 0 30px 0;
 }
