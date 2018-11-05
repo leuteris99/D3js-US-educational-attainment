@@ -47,7 +47,7 @@ nav {
   width:100%;
   height:60px;
   background: #292f36;
-  postion:fixed;
+  position:fixed;
   z-index:10;
 }
 
@@ -81,7 +81,7 @@ text{
 
 label{
   font-family: "Muli", "Gill Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !IMPORTANT;
-     border-radius: 5px !IMPORTANT;
+     border-radius: 25px !IMPORTANT; /*original to 5px */
 }
 
 .radio-toolbar input[type="radio"] {
@@ -92,15 +92,18 @@ label{
 .radio-toolbar label {
 
   display: inline-block;
-  background-color: #ddd;
+  background-color: #e24848;
   padding: 4px 11px;
   font-family: "Muli";
   font-size: 16px;
+  color: #ffffff;
+  border: 2px solid;
+  
   cursor: pointer;
 }
 
 .radio-toolbar input[type="radio"]:checked+label {
-  background-color: #bbb;
+  background-color: rgb(255, 119, 119);
 }
 
 
@@ -143,7 +146,7 @@ rect.bordered {
 
 text.axis {
     fill: #000;
-    font-family:
+    font-family: "Arial"
 }
 
 .axis path,
@@ -272,7 +275,7 @@ form {
 	  stroke-width: 3px;
 	}
 	.grandparent:hover rect {
-	  fill: #FF9B42;
+	  fill: #009B42;
 	}
 	.children rect.parent,
 	.grandparent rect {

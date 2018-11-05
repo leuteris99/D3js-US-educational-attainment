@@ -21,7 +21,7 @@ function donutChart() {
     var width,
         height,
         margin = {top: 10, right: 10, bottom: 10, left: 10},
-        colour = d3.scaleOrdinal().range(["#FFA3B1", "#73c3bf", "#a1d8c8", "#cbe0a7", "#f2db84", "#f7af72", "#FF9B42"]), // colour scheme
+        colour = d3.scaleOrdinal().range(["#F44336", "#E91E63", "#607D8B", "#009688", "#4CAF50", "#FFEB3B", "#03A9F4"]), // colour scheme
         variable, // value in data that will dictate proportions on chart
         category, // compare data by
         padAngle, // effectively dictates the gap between slices
@@ -153,11 +153,13 @@ function donutChart() {
                         .style('fill', colour(data.data[category])) // colour based on category mouse is over
                         .style('fill-opacity', 0.35);
 
+                        responsiveVoice.speak(toolTipVoice(data)); // start the voice playback
                 });
 
                 // remove the tooltip when mouse leaves the slice/label
                 selection.on('mouseout', function () {
                     d3.selectAll('.toolCircle').remove();
+                    responsiveVoice.cancel();
                 });
             }
 
@@ -184,6 +186,26 @@ function donutChart() {
             }
             // ===========================================================================================
 
+            // function to create a HTML string to use with responsiveVoice
+            // works similar to toolTipHTML function.
+            function toolTipVoice(data) {
+
+                var tip = '',
+                    i   = 0;
+
+                for (var key in data.data) {
+                    console.log(key, data.data);
+                    // if value is a number, format it as a percentage
+                    var value = key == "Percent" ? percentFormat(data.data[key]) : data.data[key];
+
+                    // add the data to a single string
+                    if (i === 0) tip += key + ': ' + value + '.';
+                    else tip += key + ': ' + value + '.';
+                    i++;
+                }
+
+                return tip;
+            }
         });
     }
 

@@ -1,0 +1,18 @@
+[x]Change colours of graphs
+    [x] graph 1
+    [x] graph 2
+    [x] graph 3
+[x]Change button layout
+    [x] colours
+    [x] corner radius
+[x]Play a sound when the mouse is hover the nav bar elements
+    [x] play sound on hover
+    [x] stop sound leaving element
+[x]Text to speach the text of element while cursor is hover it
+    [x] titles, subtitles
+    [x] first graph
+    [] second graph
+    [] third graph
+[]Responsive design
+    [] on menu
+    [] on webpage
