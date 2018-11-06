@@ -13,6 +13,6 @@
     [x] first graph
     [] second graph
     [] third graph
-[]Responsive design
-    [] on menu
-    [] on webpage
+[x]Responsive design
+    [x] on menu
+    [x] on webpage

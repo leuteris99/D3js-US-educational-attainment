@@ -1,10 +1,10 @@
 // Script 1
 // Data Visualization III - Pie Chart
 // test 1
-var screenwidth = screen.width;
+
 var donut = donutChart()
-        .width(screenwidth * 1.12)
-        .height(screenwidth * 0.5)
+        .width(960)
+        .height(450)
         .cornerRadius(0) // sets how rounded the corners are on each slice
         .padAngle(0.005) // effectively dictates the gap between slices
         .variable('Percent')
@@ -99,7 +99,7 @@ function donutChart() {
                     var pos = outerArc.centroid(d);
 
                     // changes the point to be on left or right depending on where label is.
-                    pos[0] = radius * 0.8 * (midAngle(d) < Math.PI ? 1 : -1);
+                    pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
                     return 'translate(' + pos + ')';
                 })
                 .style('text-anchor', function(d) {
@@ -118,7 +118,7 @@ function donutChart() {
 
                     // see label transform function for explanations of these three lines.
                     var pos = outerArc.centroid(d);
-                    pos[0] = radius * 0.8 * (midAngle(d) < Math.PI ? 1 : -1);
+                    pos[0] = radius * 0.95 * (midAngle(d) < Math.PI ? 1 : -1);
                     return [arc.centroid(d), outerArc.centroid(d), pos]
                 });
             // ===========================================================================================
@@ -144,7 +144,7 @@ function donutChart() {
                         .attr('class', 'toolCircle')
                         .attr('dy', -15) // hard-coded. can adjust this to adjust text vertical alignment in tooltip
                         .html(toolTipHTML(data)) // add text to the circle.
-                        .style('font-size', '.7em')
+                        .style('font-size', '.9em')
                         .style('text-anchor', 'middle'); // centres text in tooltip
 
                     pieChartSVG.append('circle')
