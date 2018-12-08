@@ -14,10 +14,10 @@
        <!-- desktop variant of navbar-->
        <nav id="desktop-nav">
          <ul>
-            <li><a href="#top" >Top</a></li>
-            <li><a href="#national">National</a></li>
-            <li><a href="#regional">Regional</a></li>
-            <li><a href="#state">State-Level</a></li>
+            <li><a href="#top" class="national">Top</a></li>
+            <li><a href="#national" class="national">National</a></li>
+            <li><a href="#regional" class="regional">Regional</a></li>
+            <li><a href="#state" class="state">State-Level</a></li>
          <ul>
         </nav>
         <!-- mobile variant of navbar -->
@@ -34,9 +34,9 @@
                 <div class="collapse navbar-collapse" id="navbar-collapse-main">
                     <ul class="nav navbar-nav navbar-left">
                         <li><a class="active" href="#top">Top</a></li>
-                        <li><a href="#national">National</a></li>
-                        <li><a href="#regional">Regional</a></li>
-                        <li><a href="#state">State-Level</a></li>
+                        <li><a href="#national" class="national">National</a></li>
+                        <li><a href="#regional" class="regional">Regional</a></li>
+                        <li><a href="#state" class="state">State-Level</a></li>
                     </ul>
                 </div>
             </div>
@@ -47,14 +47,14 @@
         
 	
 	<p><br></p>
-    <h2 class="subtitle">Nation-Wide Education Level of Population in Schooling</h2>
+    <h2 class="subtitle national_item">Nation-Wide Education Level of Population in Schooling</h2>
 	
     <svg id="pie-chart" width="960" height="450"></svg><a name="regional"></a>
-    <p><br><br><br></p>
-    <h2 class="subtitle">Educational Attainment: Region-level Breakdown of University Students</h2>
+    <!-- <p><br><br><br></p> -->
+    <h2 class="subtitle regional_item">Educational Attainment: Region-level Breakdown of University Students</h2>
 	
     <form id="tree-form">
-        <div class="radio-toolbar">
+        <div class="radio-toolbar regional_item">
             <input type="radio" id="mode1" name="treeSum" value="number" checked>
             <label for="mode1">Pursuing a Masters degree (in # of students)</label>
             <input type="radio" id="mode2" name="treeSum" value="percent">
@@ -68,10 +68,10 @@
 	<p></p>
     <div id="chart"></div>
 	<a name="state"></a>
-    <p><br><br></p>
-    <h2 class="subtitle">Education Level of Population in Schooling: State-level Breakdown</h2>
+    <!-- <p><br><br></p> -->
+    <h2 class="subtitle state_item">Education Level of Population in Schooling: State-level Breakdown</h2>
 	
-    <form id="stack-form">
+    <form id="stack-form" class="state_item">
         <div class="radio-toolbar">
             <input type="radio" id="radio1" name="mode" value="bypercent" checked>
             <label for="radio1">Students (in %)</label>
@@ -91,6 +91,7 @@
 <script src="assets/scripts/script_1.js"></script>
 <script src="assets/scripts/script_2.js"></script>
 <script src="assets/scripts/script_3.js"></script>
+<script src="assets/scripts/script_4.js"></script>
 
 <script>
     $( document ).ready(function() {
