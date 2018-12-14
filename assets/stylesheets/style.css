@@ -198,7 +198,7 @@ polyline{
     font-style: italic;
 }
 
-#pie-chart {
+#bar-chart {
     display: block;
     margin: 0 auto;
 }
@@ -208,7 +208,7 @@ polyline{
     margin: 0 auto;
 }
 
-#stacked-bar-chart {
+#pizza-chart {
     display: block;
     margin: 0 auto;
 }
