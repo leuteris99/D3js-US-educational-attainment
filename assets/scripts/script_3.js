@@ -1,202 +1,145 @@
-// Script 3
-// Data Visualization III - Stacked Bar Chart
+var height  = 400;//height of the svg canvas
+var r = 200;//radius of the pies
+//array that contains the names for all the states of u.s.
+var states = ["Alabama","Alaska","Arizona",	"Arkansas",	"California","Colorado","Connecticut","Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine	Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Puerto Rico","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
 
-var screenWidth = screen.width;
-var margin = {top: 10, right: 231, bottom: 90, left: 50},
-	width = .97*window.innerWidth - margin.left - margin.right,
-	height = Math.min(500, window.innerHeight*.9) - margin.top - margin.bottom;
-
-var xscale = d3.scaleBand()
-                .range([0, width]);
-
-var yscale = d3.scaleLinear()
-	           .range([height, 0]);
-
-var colors = d3.scaleOrdinal()
-//    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-//    .range(["#177E89", "#0a5971", "#0f436f", "#444b80", "#664d83", "#95457c", "#9a295d"]);
-//.range(["#0a5971", "#177E89", "#4b8e77", "#a9ad70", "#ccb221", "#cb8b25", "#DB3A34"]);
-//.range(["#ef9999", "#e8b9ae", "#d8cdb3", "#90afa2", "#6f94a3", "#607495", "#4e5684"]);
-.range(["#FFA3B1", "#FAc3bf", "#B2f8c8", "#B9e0d7", "#AAddf4", "#A0Cf72", "#039B42"]);
-//.range(["hsl(190, 69%, 65%)", "hsl(177, 69%, 65%)", "hsl(144, 69%, 65%)", "hsl(100, 69%, 65%)", "hsl(47, 69%, 65%)", "hsl(28, 69%, 65%)", "hsl(28, 69%, 65%)"]);
+d3.tsv("assets/data/data.tsv", function(data){
+    //colors of the pies
+    var color = d3.scaleOrdinal(["#f44336","#e91e63","#9c27b0","#673ab7","#3f51b5","#2196f3","#03a9f4","#00bcd4","#009688","#4caf50","#8bc34a","#cddc39","#ffeb3b","#ffc107","#ff9800","#ff5722"]);
+    var totalData1 = [];//array that contains the number of students in every state (A-M)
+    var totalData2 = [];//array that contains the number of students in every state (N-W)
+    for(var i = 0; i < states.length / 2; i++){
+        totalData1[i] = data[0][states[i]];//fill the array with the data
+    }
+    for(var i = Math.round(states.length / 2),j=0; i < states.length; i++,j++){
+        totalData2[j] = data[0][states[i]];//fill the array with the data
+    }
 
 
-var xaxis = d3.axisBottom(xscale);
+    /** First chart (A-M)*/
 
-var yaxis = d3.axisLeft(yscale)
-	           .tickFormat(d3.format(".0%")); // **
+    var canvas = d3.select("#pizza-chart")
+        .append("svg")
+        .attr("width", 600)
+        .attr("height", height);
 
-var stackedBarSVG = d3.select("#stacked-bar-chart")
-    .attr("width", width + margin.left + margin.right)
-	.attr("height", height + margin.top + margin.bottom)
-	.append("g")
-	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var group = canvas.append("g")
+        .attr("transform", "translate(300,200)");
 
-// load and handle the data
-d3.tsv("assets/data/data.tsv", function(error, data) {
+    var arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(r);
 
-	// rotate the data
-	var categories = d3.keys(data[0]).filter(function(key) { return key !== "state" && key !== "National"; });
-	var parsedata = categories.map(function(name) { return { "state": name }; });
-	data.forEach(function(d) {
-		parsedata.forEach(function(pd) {
-			pd[d["state"]] = d[pd["state"]];
-		});
-	});
+    var pie = d3.pie()
+        .value(function(d){ return d; })
+        .sort(null);
+        
+    var arcs = group.selectAll(".arc")
+        .data(pie(totalData1))
+        .enter()
+            .append("g")
+            .attr("class", "arc")
+            .on("mouseover", function(d,i){ onMouseHover(d,i); })
+            .on("mouseout", function(d,i){ onMouseOut(); });
 
-	// map column headers to colors (except for 'state' and 'Base: All Respondents')
-	colors.domain(d3.keys(parsedata[0]).filter(function(key) { return key !== "state" && key !== "Base: All Respondents"; }));
+    arcs.append("path")
+        .attr("d", arc)
+        .attr("fill", function(d){ return color(d.data); });
 
-	// add a 'responses' parameter to each row that has the height percentage values for each rect
-	parsedata.forEach(function(pd) {
-		var y0 = 0;
-		// colors.domain() is an array of the column headers (text)
-		// pd.responses will be an array of objects with the column header
-		// and the range of values it represents
-		pd.responses = colors.domain().map(function(response) {
-			var responseobj = {response: response, y0: y0, yp0: y0};
-			y0 += +pd[response];
-			responseobj.y1 = y0;
-			responseobj.yp1 = y0;
-			return responseobj;
-		});
-		// y0 is now the sum of all the values in the row for this category
-		// convert the range values to percentages
-		pd.responses.forEach(function(d) { d.yp0 /= y0; d.yp1 /= y0; });
-		// save the total
-		pd.totalresponses = pd.responses[pd.responses.length - 1].y1;
-	});
+    //creating the "Select State" text
+    canvas.append("g")
+        .attr("id","selectText")
+        .attr("transform", "translate(450,25)")
+        .append("text")
+            .text("Select State A-W");
+ 
+    canvas.append("g")
+        .attr("transform", "translate(50,25)")
+        .append("text")
+            .text("States: A-M");
 
-	// sort by the value in 'Right Direction'
-	// parsedata.sort(function(a, b) { return b.responses[0].yp1 - a.responses[0].yp1; });
 
-	// ordinal-ly map categories to x positions
-	xscale.domain(parsedata.map(function(d) { return d.state; }));
+    /** Second chart (N-W)*/
 
-	// add the x axis and rotate its labels
-	stackedBarSVG.append("g")
-		.attr("class", "x axis")
-		.attr("transform", "translate(0," + height + ")")
-		.call(xaxis)
-		.selectAll("text")
-		.attr("y", 5)
-		.attr("x", 7)
-		.attr("dy", ".35em")
-		.attr("transform", "rotate(65)")
-		.style("text-anchor", "start");
+    var canvasV2 = d3.select("#pizza-chart")
+        .append("svg")
+        .attr("width", 600)
+        .attr("height", height);
 
-	// add the y axis
-	stackedBarSVG.append("g")
-		.attr("class", "y axis")
-		.call(yaxis);
+    var groupV2 = canvasV2.append("g")
+        .attr("transform", "translate(300,200)");
 
-	// create stackedBarSVG groups ("g") and place them
-	var category = stackedBarSVG.selectAll(".category")
-		.data(parsedata)
-		.enter().append("g")
-		.attr("class", "category")
-		.attr("transform", function(d) { return "translate(" + xscale(d.state) + ",0)"; });
+    var arcsV2 = groupV2.selectAll(".arc")
+        .data(pie(totalData2))
+        .enter()
+            .append("g")
+            .attr("class", "arc")
+            .on("mouseover", function(d,i){ onMouseHover(d,i + totalData1.length); })
+            .on("mouseout", function(d,i){ onMouseOut(); });
 
-	// draw the rects within the groups
-	category.selectAll("rect")
-		.data(function(d) { return d.responses; })
-		.enter().append("rect")
-		.attr("width", xscale.bandwidth())
-		.attr("y", function(d) { return yscale(d.yp1); })
-		.attr("height", function(d) { return yscale(d.yp0) - yscale(d.yp1); })
-		.style("fill", function(d) { return colors(d.response); });
+    arcsV2.append("path")
+        .attr("d", arc)
+        .attr("fill", function(d){ return color(d.data); });
 
-	// position the legend elements
-	var legend = stackedBarSVG.selectAll(".legend")
-		.data(colors.domain())
-		.enter().append("g")
-		.attr("class", "legend")
-		.attr("transform", function(d, i) { return "translate(57," + ((120) - (i * 20)) + ")"; });
+    canvasV2.append("g")
+        .attr("transform", "translate(50,25)")
+        .append("text")
+            .text("States: N-W");
+    
 
-	legend.append("rect")
-		.attr("x", width - 18)
-		.attr("width", 18)
-		.attr("height", 18)
-		.style("fill", colors);
+    // onmouse functions
+    function onMouseHover(d,i){
+        var detailData = [];//array that contains the number of students of a state in a specific age
+        for(var j = 1; j < 8; j++){
+            detailData[j-1] = data[j][states[i]]; 
+        }
 
-	legend.append("text")
-		.attr("x", width + 10)
-		.attr("y", 9)
-		.attr("dy", ".35em")
-		.style("text-anchor", "start")
-		.text(function(d) { return d; });
+        /** Details chart */
+        // creates the details chart when the mouse is on hover
+        var canvasV3 = d3.select("#pizza-chart")
+            .append("svg")
+            .attr("id", "details")
+            .attr("width", 600)
+            .attr("height", height);
 
-	// speach playback on hover colours
-	$(document).ready(function(){
-		$(".legend").mouseenter(function(){
-		responsiveVoice.cancel(); 
-		responsiveVoice.speak($(this).text());
-		});
-		$(".legend").mouseleave(function(){
-		responsiveVoice.cancel();
-		});
-	});
+        var groupV3 = canvasV3.append("g")
+            .attr("transform", "translate(300,200)");
 
-	// animation
-	d3.selectAll("#stack-form input").on("change", handleFormClick);
+        var arcsV3 = groupV3.selectAll(".arc")
+            .data(pie(detailData))
+            .attr("class","details")
+            .enter()
+                .append("g")
+                .attr("class", "arc");
 
-	function handleFormClick() {
-		if (this.value === "bypercent") {
-			transitionPercent();
-		} else {
-			transitionCount();
-		}
-	}
+        arcsV3.append("path")
+            .attr("d", arc)
+            .attr("fill", function(d){ return color(d.data); });
 
-	// transition to 'percent' presentation
-	function transitionPercent() {
-		// reset the yscale domain to default
-		yscale.domain([0, 1]);
+        // create the text inside the details pie
+        var school = ["in preschool","in kindergarten","in grade 1 to grade 4","in grade 5 to grade 8","in high school","in college","in graduate school"];
+        arcsV3.append("text")
+            .attr("transform", function(d){ return "translate(" + arc.centroid(d) + ")" + "rotate(" + angle(d) + ")"; })
+            .attr("text-anchor", "middle")
+            .attr("font-size", "2.5em")
+            .text(function(d,i){ return school[i]; });
 
-		// create the transition
-		var trans = stackedBarSVG.transition().duration(250);
+        // Change the text to the selected state
+        d3.select("#selectText text")
+            .text(states[i])
+    }
 
-		// transition the bars
-		var categories = trans.selectAll(".category");
-		categories.selectAll("rect")
-			.attr("y", function(d) { return yscale(d.yp1); })
-			.attr("height", function(d) { return yscale(d.yp0) - yscale(d.yp1); });
+    function onMouseOut(){
+        d3.select("#details")
+            .remove();
+        //make the text back to the default when the mouse stop hovering the state
+        d3.select("#selectText text")
+            .text("Select State A-W")
+    }
 
-		// change the y-axis
-		// set the y axis tick format
-		yaxis.tickFormat(d3.format(".0%"));
-		stackedBarSVG.selectAll(".y.axis").call(yaxis);
-	}
-
-	// transition to 'count' presentation
-	function transitionCount() {
-		// set the yscale domain
-		yscale.domain([0, d3.max(parsedata, function(d) { return d.totalresponses; })]);
-
-		// create the transition
-		var transone = stackedBarSVG.transition()
-			.duration(250);
-
-		// transition the bars (step one)
-		var categoriesone = transone.selectAll(".category");
-		categoriesone.selectAll("rect")
-			.attr("y", function(d) { return this.getBBox().y + this.getBBox().height - (yscale(d.y0) - yscale(d.y1)) })
-			.attr("height", function(d) { return yscale(d.y0) - yscale(d.y1); });
-
-		// transition the bars (step two)
-		var transtwo = transone.transition()
-			.delay(350)
-			.duration(350)
-			.ease(d3.easeBounce);
-		var categoriestwo = transtwo.selectAll(".category");
-		categoriestwo.selectAll("rect")
-			.attr("y", function(d) { return yscale(d.y1); });
-
-		// change the y-axis
-		// set the y axis tick format
-		yaxis.tickFormat(d3.format(".2s"));
-		stackedBarSVG.selectAll(".y.axis").call(yaxis);
-	}
+    // function that finds the angle to rotate the text inside the details pie
+    function angle(d) {
+        var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
+        return a > 90 ? a - 180 : a;
+      }
 });
-
-d3.select(self.frameElement).style("height", (height + margin.top + margin.bottom) + "px");
