@@ -15,7 +15,6 @@ d3.tsv("assets/data/data.tsv", function(data){
         totalData2[j] = data[0][states[i]];//fill the array with the data
     }
 
-
     /** First chart (A-M)*/
 
     var canvas = d3.select("#pizza-chart")
@@ -50,8 +49,16 @@ d3.tsv("assets/data/data.tsv", function(data){
     canvas.append("g")
         .attr("id","selectText")
         .attr("transform", "translate(450,25)")
+        .attr("font-size", "1em")
         .append("text")
             .text("Select State A-W");
+    //create the value text under the Select State
+    canvas.append("g")
+        .attr("id","valueText")
+        .attr("transform", "translate(450,40)")
+        .attr("font-size", "0.8em")
+        .append("text")
+            .text("");
  
     canvas.append("g")
         .attr("transform", "translate(50,25)")
@@ -124,9 +131,12 @@ d3.tsv("assets/data/data.tsv", function(data){
             .attr("font-size", "2.5em")
             .text(function(d,i){ return school[i]; });
 
-        // Change the text to the selected state
+        // Change the text to the selected state and the number of students
         d3.select("#selectText text")
-            .text(states[i])
+            .text(states[i]);
+
+        d3.select("#valueText text")
+            .text(data[0][states[i]] + " Students");
     }
 
     function onMouseOut(){
@@ -134,7 +144,10 @@ d3.tsv("assets/data/data.tsv", function(data){
             .remove();
         //make the text back to the default when the mouse stop hovering the state
         d3.select("#selectText text")
-            .text("Select State A-W")
+            .text("Select State A-W");
+
+        d3.select("#valueText text")
+            .text("");
     }
 
     // function that finds the angle to rotate the text inside the details pie
